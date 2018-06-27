@@ -4,14 +4,21 @@
 //
 //  Created by 陳育祥 on 2018/6/26.
 //  Copyright © 2018年 陳育祥. All rights reserved.
-// 
+//
 
 import UIKit
 
 class EditFoodTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    var name: String?
+    var date: Date?
+    var cal: String?
+    var img: UIImage?
+    
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var foodImageView: UIImageView!
+    @IBOutlet weak var calTextField: UITextField!
+    @IBOutlet weak var foodDate: UIDatePicker!
     
     @IBAction func cameraPressed(_ sender: UIButton) {
         let controller = UIImagePickerController()
@@ -32,9 +39,13 @@ class EditFoodTableViewController: UITableViewController, UIImagePickerControlle
     }
     
     @IBAction func donePressed(_ sender: Any) {
-        if nameTextField.text != "" {
+        if nameTextField.text != "", calTextField.text != ""{
+            if foodImageView.image == nil{
+                foodImageView.image = UIImage()
+            }
             let number = Date().timeIntervalSinceReferenceDate
-            let tempFood = ["name":nameTextField.text!, "photo":"\(number)"]
+            let tempName = nameTextField.text! + "," + calTextField.text! + "," + "\(foodDate.date)"
+            let tempFood = ["name":tempName, "photo":"\(number)"]
             let data = UIImageJPEGRepresentation(foodImageView.image!, 0.8)
             let fileManager = FileManager.default
             let docUrls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
@@ -45,16 +56,30 @@ class EditFoodTableViewController: UITableViewController, UIImagePickerControlle
             NotificationCenter.default.post(name: notiName, object: nil, userInfo: tempFood)
             navigationController?.popViewController(animated: true)
         } else {
-            let alertController = UIAlertController(title: "請輸入食物名稱", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(action)
-            present(alertController, animated: true, completion: nil)
+            if nameTextField.text == "" {
+                let alertController = UIAlertController(title: "請輸入食物名稱", message: nil, preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(action)
+                present(alertController, animated: true, completion: nil)
+            } else if calTextField.text == "" {
+                let alertController = UIAlertController(title: "請輸入食物熱量", message: nil, preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(action)
+                present(alertController, animated: true, completion: nil)
+            }
         }
         
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        nameTextField.text = name
+        calTextField.text = cal
+        if let date = date {
+            foodDate.date = date
+        }
+        if let img = img {
+            foodImageView.image = img
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

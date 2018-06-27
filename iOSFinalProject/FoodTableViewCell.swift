@@ -2,7 +2,7 @@
 //  FoodTableViewCell.swift
 //  iOSFinalProject
 //
-//  Created by 陳育祥 on 2018/6/26.
+//  Created by 陳育祥 on 2018/6/27.
 //  Copyright © 2018年 陳育祥. All rights reserved.
 //
 
@@ -10,8 +10,9 @@ import UIKit
 
 class FoodTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var calorieLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var foodLabel: UILabel!
+    @IBOutlet weak var foodImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
